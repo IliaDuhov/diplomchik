@@ -1,0 +1,219 @@
+<div class="container p-3">
+  <h3 class="mat-headline-4 mb-4">Список ботов</h3>
+
+  <mat-card class="section-card mb-4">
+    <h2>Что такое FIGI и как выбрать параметры</h2>
+    <p>
+      FIGI (Financial Instrument Global Identifier) — уникальный идентификатор, используемый для обозначения финансовых инструментов на бирже. 
+      Он нужен для точного указания, с каким активом будет работать бот.
+    </p>
+    <p>
+      В проекте доступны популярные FIGI: акции крупных компаний, индексы и ETF. Вы можете выбрать один из предложенных вариантов или ввести свой.
+    </p>
+    <p>
+      Рекомендуемые значения:
+      <ul>
+        <li><strong>Take Profit</strong>: 0.001 — 0.7 (в зависимости от волатильности инструмента)</li>
+        <li><strong>Stop Loss</strong>: 0.005 — 0.6 (не выше Take Profit)</li>
+        <li><strong>Количество лотов</strong>: в пределах разумного объема торговли, минимально — 1</li>
+        <li><strong>Стратегии</strong>: 
+          <ul>
+            <li><code>ONE_MINUTE_SCALPING</code> — ориентируется на пересечения скользящих средних</li>
+            <li><code>THREE_LINE_STRIKE</code> — торгует на пробой уровней</li>
+          </ul>
+        </li>
+        <p>
+          Если хотите получать уведомления о работе - напишите этомоу боту в телеграм <strong> duhovInvest_bot</strong> 
+        </p>
+      </ul>
+    
+  </mat-card>
+
+  <div class="row">
+    <!-- Левая колонка: готовые FIGI -->
+    <div class="col-md-3 mb-3">
+      <mat-card class="figi-card mb-4">
+        <mat-card-title>Популярные FIGI</mat-card-title>
+        <mat-divider></mat-divider>
+        <div class="figi-list mt-2">
+          <button
+            mat-stroked-button
+            class="figi-chip"
+            *ngFor="let f of figiOptions"
+            (click)="selectFigi(f.figi)"
+          >
+            <div class="figi-content">
+              <div class="figi-name">{{ f.name }}</div>
+              <div class="figi-code">{{ f.figi }}</div>
+            </div>
+          </button>
+        </div>
+      </mat-card>
+      <!-- Описание FIGI и параметров -->
+      
+    </div>
+
+    <!-- Правая колонка: форма и список ботов -->
+    <div class="col-md-9">
+      <!-- Форма создания -->
+      <mat-card class="p-3 mb-4">
+        <form [formGroup]="botForm" class="d-flex flex-column gap-3">
+          <!-- FIGI -->
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>FIGI</mat-label>
+            <input
+              matInput
+              formControlName="figi"
+              placeholder="FIGI инструмента"
+            />
+          </mat-form-field>
+
+          <!-- Take Profit -->
+          
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Tinkoff Token</mat-label>
+            <input
+              matInput
+              type="password"
+              formControlName="token"
+              placeholder="Введите токен Tinkoff"
+              readonly
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Take Profit</mat-label>
+            <input
+              matInput
+              type="number"
+              step="0.0001"
+              min="0.0001"
+              max="0.7"
+              formControlName="takeProfit"
+            />
+            <mat-error *ngIf="botForm.get('takeProfit')?.hasError('required')">
+              Обязательно к заполнению
+            </mat-error>
+            <mat-error *ngIf="botForm.get('takeProfit')?.hasError('min')">
+              Минимум 0.0001
+            </mat-error>
+            <mat-error *ngIf="botForm.get('takeProfit')?.hasError('max')">
+              Максимум 0.7
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Stop Loss -->
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Stop Loss</mat-label>
+            <input
+              matInput
+              type="number"
+              step="0.0001"
+              min="0.0001"
+              max="0.6"
+              formControlName="stopLoss"
+            />
+            <mat-error *ngIf="botForm.get('stopLoss')?.hasError('required')">
+              Обязательно к заполнению
+            </mat-error>
+            <mat-error *ngIf="botForm.get('stopLoss')?.hasError('min')">
+              Минимум 0.0001
+            </mat-error>
+            <mat-error *ngIf="botForm.get('stopLoss')?.hasError('max')">
+              Максимум 0.7
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Количество лотов -->
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Количество лотов</mat-label>
+            <input
+              matInput
+              type="number"
+              min="1"
+              formControlName="numberOfLots"
+            />
+            <mat-error *ngIf="botForm.get('numberOfLots')?.hasError('min')">
+              Минимум 1
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Стратегия -->
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Стратегия</mat-label>
+            <mat-select formControlName="strategyCode">
+              <mat-option
+                *ngFor="let strategy of strategyOptions"
+                [value]="strategy"
+              >
+                {{ strategy }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Telegram Chat ID -->
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Telegram Chat ID</mat-label>
+            <input matInput formControlName="telegramBotChatId" />
+          </mat-form-field>
+
+          <!-- Кнопки -->
+          <div class="d-flex gap-2">
+            <button mat-stroked-button (click)="createReal()">
+              Создать REAL
+            </button>
+            <button mat-stroked-button (click)="createSimulation()">
+              Симуляция
+            </button>
+          </div>
+        </form>
+      </mat-card>
+
+      <mat-divider class="my-4"></mat-divider>
+
+      <!-- Список существующих ботов -->
+      <div class="row">
+        <div
+          class="col-12 col-md-6 col-lg-4 mt-3"
+          *ngFor="let bot of bots"
+        >
+          <mat-card
+            class="h-100 shadow-sm bot-card"
+            [routerLink]="'/bot/' + bot.uuid"
+            style="cursor: pointer;"
+          >
+            <mat-card-header>
+              <mat-card-title>{{ bot.instrument }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <p>Заявок: {{ bot.numberOfOrders }}</p>
+              <p>
+                Доход:
+                <span
+                  [ngClass]="{
+                    'text-danger': bot.profit < 0,
+                    'text-success': bot.profit > 0
+                  }"
+                >
+                  {{ bot.profit }} ({{ bot.profitPercentage }}%){{ bot.currency
+                  }}
+                </span>
+              </p>
+              <p>Ошибок: {{ bot.errors.length }}</p>
+              <mat-chip color="accent" selected>{{ bot.botEnv }}</mat-chip>
+            </mat-card-content>
+            <mat-card-actions>
+              <button
+                mat-stroked-button
+                color="warn"
+                (click)="removeBot(bot.uuid); $event.stopPropagation()"
+              >
+                Удалить
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

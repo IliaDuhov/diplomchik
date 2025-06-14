@@ -1,0 +1,97 @@
+@import '~@angular/material/theming';
+
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 450px;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  background: white;
+  animation: fadeIn 0.5s ease-in-out;
+
+  .card-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+
+    h2 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 500;
+      color: #3f51b5;
+    }
+
+    .icon {
+      font-size: 50px;
+      width: 50px;
+      height: 50px;
+      color: #3f51b5;
+      margin-top: 10px;
+    }
+  }
+
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 15px;
+
+    mat-icon {
+      color: rgba(0, 0, 0, 0.54);
+      margin-right: 8px;
+    }
+  }
+
+  .submit-button {
+    margin-top: 10px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .login-link {
+    text-align: center;
+    margin-top: 20px;
+    color: #666;
+
+    a {
+      color: #3f51b5;
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+mat-error {
+  font-size: 12px;
+}

@@ -1,0 +1,24 @@
+app:
+  name: Invest Bot
+  config:
+    token: "t.NS9aV408Z6XlOFBb0Af4bT7req4kShpq8uzV_na1VM4G0BKb9igVuLAM-zrbyeu1ebVZJAMdNLrqTVaSHOnsVg"
+  telegram:
+    token: "8152754348:AAHdbVrpIgz6U1dTlgYmR5fV7iwmMYDfokg"
+
+server:
+  port: 8090
+  servlet:
+    context-path: /api
+
+socket:
+  port: 9092
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: logfile
+
+logging:
+  file:
+    name: /tmp/app.log

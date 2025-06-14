@@ -1,0 +1,18 @@
+:host {
+    display: block;
+  
+    .app-title {
+      font-weight: bold;
+      font-size: 1.4rem;
+    }
+  
+    .spacer {
+      flex: 1 1 auto;
+    }
+  
+    button {
+      color: black; // на жёлтом фоне
+      font-weight: 500;
+    }
+  }
+  
